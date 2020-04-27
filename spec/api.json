@@ -1,0 +1,1014 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Welcome to the Swagger documentation page for Audience Manager Customer Data API. For a complete description of the feature, see [Audience Manager Customer Data API Overview](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/customer-api-overview.html)",
+        "version": "1.0.0",
+        "title": "Audience Manager Customer Data API"
+    },
+    "servers": [
+        {
+            "url": "https://dmp-data.adobe.io",
+            "description": "Production environment"
+        },
+        {
+            "url": "https://dmp-data-stage.adobe.io",
+            "description": "Stage environment"
+        }
+    ],
+    "tags": [
+        {
+            "name": "stream",
+            "description": "Data streaming. Allows multiple profile updates on the same call. Find out more in the [Making API Calls](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/making-api-calls.html#post-stream-call) documentation page."
+        },
+        {
+            "name": "profile viewer",
+            "description": "Get trait and segment qualification information for a profile from all Audience Manager regions. Use this endpoint to validate successful data onboarding."
+        },
+        {
+            "name": "data collection",
+            "description": "Data streaming using the Audience Manager Data Collection API.",
+            "externalDocs": {
+                "description": "More information about the DCS API:",
+                "url": "https://marketing.adobe.com/resources/help/en_US/aam/dcs-url-send.html"
+            }
+        }
+    ],
+    "schemes": [
+        "https"
+    ],
+    "security": [
+        {
+            "imsServiceToken": []
+        }
+    ],
+    "paths": {
+        "/stream/{streamId}": {
+            "post": {
+                "tags": [
+                    "stream"
+                ],
+                "summary": "Ingest profile updates related to a given data stream.",
+                "description": "The maximum request size is limited to 100K.\n",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/streamId"
+                    },
+                    {
+                        "name": "x-gw-ims-org-id",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information.",
+                        "required": true
+                    },
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "type": "string",
+                        "description": "The API Key configured for your application. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information.",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "description": "Profile updates to be ingested via the specified data stream.",
+                            "required": true,
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUsersDataRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "A 200 OK status code means all profile updates have been successfully processed. <br> 200 OK along with a `UpdateUsersDataResponse` with status:`PARTIAL_SUCCESS` implies some of the profile updates could not be successfully processed due to internal errors. Those profile updates are described in the error details object.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "imsServiceToken": []
+                    }
+                ]
+            }
+        },
+        "/profile/{dataSourceId}/{id}": {
+            "get": {
+                "tags": [
+                    "profileViewer"
+                ],
+                "summary": "Get trait and segment qualification information for a profile from all Audience Manager regions.",
+                "description": "Returns aggregated information for a profile, including trait and segment qualification information. You can filter the requests by region to return qualification information from certain regions only.",
+                "parameters": [
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "type": "string",
+                        "description": "The API Key configured for your application. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information.",
+                        "required": true
+                    },
+                    {
+                        "name": "x-gw-ims-org-id",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information.",
+                        "required": true
+                    },
+                    {
+                        "name": "filter[regionId]",
+                        "in": "query",
+                        "type": "string",
+                        "description": "One or more [location Ids](https://marketing.adobe.com/resources/help/en_US/aam/dcs-regions.html), separated by comma, that correspond to the region(s) where profile information should be fetched from.",
+                        "required": false,
+                        "example": "7,9"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dataSourceId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK. Returns the aggregated profile information including trait and segment qualification."
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized. Invalid Bearer token."
+                    },
+                    "404": {
+                        "description": "Not found. Some resource could not be found."
+                    },
+                    "500": {
+                        "description": "Internal server error."
+                    }
+                }
+            }
+        },
+        "/event/s2s/{streamId}": {
+            "get": {
+                "tags": [
+                    "dataCollection"
+                ],
+                "summary": "Ingest a single Audience Manager profile update via a GET call.",
+                "description": "This API is built on top of the [Data Collection Audience Manager API](https://marketing.adobe.com/resources/help/en_US/aam/dcs-keys.html).<br> A Data Collection API call translates to a single profile update. Use the Stream API if you need to ingest multiple profile updates in the same call.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/dStreamId"
+                    },
+                    {
+                        "name": "x-gw-ims-org-id",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information.",
+                        "required": true
+                    },
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "type": "string",
+                        "description": "The API Key configured for your application. See: https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/AuthenticationOverview/APIKeyIntegration.md ",
+                        "required": true
+                    },
+                    {
+                        "$ref": "#/components/parameters/orgId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dSid"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dTDpid"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dUuid"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dMid"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dCid"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dWs"
+                    },
+                    {
+                        "$ref": "#/components/parameters/dLocationId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully processed.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "dataCollection"
+                ],
+                "summary": "Ingest a single Audience Manager profile update via a POST call.",
+                "description": "This API is built on top of the [Data Collection Audience Manager API](https://marketing.adobe.com/resources/help/en_US/aam/dcs-keys.html).<br> A Data Collection API call translates to a single profile update. Use the Stream API if you need to ingest multiple profile updates in the same call.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/dStreamId"
+                    },
+                    {
+                        "name": "x-gw-ims-org-id",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information.",
+                        "required": true
+                    },
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "type": "string",
+                        "description": "The API Key configured for your application. See: https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/AuthenticationOverview/APIKeyIntegration.md ",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "d_orgid": {
+                                        "$ref": "#/components/parameters/formOrgId"
+                                    },
+                                    "d_sid": {
+                                        "$ref": "#/components/parameters/formSid"
+                                    },
+                                    "d_tdpid": {
+                                        "$ref": "#/components/parameters/formTDpid"
+                                    },
+                                    "d_uuid": {
+                                        "$ref": "#/components/parameters/formUuid"
+                                    },
+                                    "d_mid": {
+                                        "$ref": "#/components/parameters/formMid"
+                                    },
+                                    "d_cid": {
+                                        "$ref": "#/components/parameters/formCid"
+                                    },
+                                    "d_ws": {
+                                        "$ref": "#/components/parameters/formWs"
+                                    },
+                                    "d_location_id": {
+                                        "$ref": "#/components/parameters/formLocationId"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully processed.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error.",
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateUsersDataResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "imsServiceToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "parameters": {
+            "streamId": {
+                "in": "path",
+                "name": "streamId",
+                "description": "You must add a `streamID` to each Customer API call. The `streamID` is an alphanumeric identifier, and must match the string '^[a-zA-Z0-9\\.\\,\\+\\-\\$\\_\\*\\!\\(\\)]+$'. <br> Some valid examples are `crm123` , `premiumtier123` , `summercampaignshoes`.",
+                "required": true,
+                "type": "string"
+            },
+            "dStreamId": {
+                "in": "path",
+                "name": "streamId",
+                "description": "The alphanumeric identifier for this stream.",
+                "required": false,
+                "type": "string"
+            },
+            "orgId": {
+                "in": "query",
+                "name": "d_orgid",
+                "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information. <br> It must match the Org Id provided via x-gw-ims-org-id, if present.",
+                "type": "string",
+                "required": true
+            },
+            "formOrgId": {
+                "in": "formData",
+                "name": "d_orgid",
+                "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information. <br> It must match the Org Id provided via x-gw-ims-org-id, if present.",
+                "type": "string",
+                "required": true,
+                "example": "<YOUR_ORG_ID>"
+            },
+            "hOrgId": {
+                "in": "header",
+                "name": "x-gw-ims-org-id",
+                "description": "Your company's Organization ID. It must match the format: ([A-Za-z0-9]*)@AdobeOrg. See [Authenticating with Adobe IO](https://docs.adobe.com/content/help/en/aam-customer-api/help/alpha-guide/implementation-guide/adobe-io-integration.html#obtain-api-key) for more information. ",
+                "type": "string",
+                "required": false
+            },
+            "dSid": {
+                "in": "query",
+                "name": "d_sid",
+                "description": "SID stands for score ID. This is a unique ID for a trait or a segment.",
+                "type": "array",
+                "collectionFormat": "multi",
+                "example": "11233"
+            },
+            "formSid": {
+                "in": "formData",
+                "name": "d_sid",
+                "description": "SID stands for score ID. This is a unique ID for a trait or a segment.",
+                "type": "array",
+                "collectionFormat": "multi",
+                "example": "11233"
+            },
+            "dTDpid": {
+                "in": "query",
+                "name": "d_tdpid",
+                "description": "Passes a data source for trait evaluation. Only traits from this data source are evaluated. See [Supported Attributes for DCS API Calls](https://docs.adobe.com/content/help/en/audience-manager/user-guide/api-and-sdk-code/dcs/dcs-api-reference/dcs-keys.html).",
+                "type": "array",
+                "collectionFormat": "multi",
+                "example": "23421"
+            },
+            "formTDpid": {
+                "in": "formData",
+                "name": "d_tdpid",
+                "description": "Passes a data source for trait evaluation. Only traits from this data source are evaluated. See [Supported Attributes for DCS API Calls](https://docs.adobe.com/content/help/en/audience-manager/user-guide/api-and-sdk-code/dcs/dcs-api-reference/dcs-keys.html).",
+                "type": "array",
+                "collectionFormat": "multi",
+                "example": "23421"
+            },
+            "dUuid": {
+                "in": "query",
+                "name": "d_uuid",
+                "description": "Unique Audience Manager user ID. See [Index of IDs in Audience Manager](https://docs.adobe.com/help/en/audience-manager/user-guide/reference/ids-in-aam.html).",
+                "type": "string",
+                "example": "<AUDIENCE_MANAGER_ID>"
+            },
+            "formUuid": {
+                "in": "formData",
+                "name": "d_uuid",
+                "description": "Unique Audience Manager user ID. See [Index of IDs in Audience Manager](https://docs.adobe.com/help/en/audience-manager/user-guide/reference/ids-in-aam.html).",
+                "type": "string",
+                "example": "<AUDIENCE_MANAGER_ID>"
+            },
+            "dMid": {
+                "in": "query",
+                "name": "d_mid",
+                "description": "Specifies the Experience Cloud ID set and used by the Experience Cloud ID service.<br> See [The Experience Cloud Id Service](https://marketing.adobe.com/resources/help/en_US/mcvid/mcvid_cookies.html) and [Index of IDs in Audience Manager](https://docs.adobe.com/help/en/audience-manager/user-guide/reference/ids-in-aam.html).",
+                "type": "string",
+                "example": "<EXPERIENCE_CLOUD_ID>"
+            },
+            "formMid": {
+                "in": "formData",
+                "name": "d_mid",
+                "description": "Specifies the Experience Cloud ID set and used by the Experience Cloud ID service.<br> See [The Experience Cloud Id Service](https://marketing.adobe.com/resources/help/en_US/mcvid/mcvid_cookies.html) and [Index of IDs in Audience Manager](https://docs.adobe.com/help/en/audience-manager/user-guide/reference/ids-in-aam.html).",
+                "type": "string",
+                "example": "<EXPERIENCE_CLOUD_ID>"
+            },
+            "dCid": {
+                "in": "query",
+                "name": "d_cid",
+                "description": "Contains a pair of data provider ID and data provider user ID separated by `%01`. See [CID Replaces DPID and DPUUID](https://docs.adobe.com/help/en/audience-manager/user-guide/reference/cid.html).",
+                "type": "string",
+                "example": "<DPID>%01<DPUID>"
+            },
+            "formCid": {
+                "in": "formData",
+                "name": "d_cid",
+                "description": "Contains a pair of data provider ID and data provider user ID separated by `%01`. See [CID Replaces DPID and DPUUID](https://docs.adobe.com/help/en/audience-manager/user-guide/reference/cid.html).",
+                "type": "string",
+                "example": "<DPID>%01<DPUID>"
+            },
+            "dWs": {
+                "in": "query",
+                "name": "d_ws",
+                "description": "Write Style indicator: how the provided signals and/or trait IDs act upon the given profile(s).<br> If not provided, the request is evaluated as an APPEND operation.<br> If an Overwrite operation is set, the request must also contain the `d_tdpid` parameter.",
+                "type": "string",
+                "enum": [
+                    "overwrite",
+                    "delete"
+                ],
+                "example": "overwrite"
+            },
+            "formWs": {
+                "in": "formData",
+                "name": "d_ws",
+                "description": "Write Style indicator: how the provided signals and/or trait IDs act upon the given profile(s).<br> If not provided, the request is evaluated as an APPEND operation.<br> If an Overwrite operation is set, the request must also contain the `d_tdpid` parameter.",
+                "type": "string",
+                "enum": [
+                    "overwrite",
+                    "delete"
+                ],
+                "example": "overwrite"
+            },
+            "dLocationId": {
+                "in": "query",
+                "name": "d_location_id",
+                "description": "One or more [location hints](https://marketing.adobe.com/resources/help/en_US/aam/dcs-regions.html) that correspond to the region where we've previously seen this user interacting with the Adobe services.",
+                "type": "array",
+                "collectionFormat": "multi",
+                "example": "7"
+            },
+            "formLocationId": {
+                "in": "formData",
+                "name": "d_location_id",
+                "description": "One or more [location hints](https://marketing.adobe.com/resources/help/en_US/aam/dcs-regions.html) that correspond to the region where we've previously seen this user interacting with the Adobe services.",
+                "type": "array",
+                "collectionFormat": "multi",
+                "example": "10"
+            },
+            "dataSourceId": {
+                "in": "path",
+                "name": "dataSourceId",
+                "schema": {
+                    "type": "string"
+                },
+                "description": "The unique identifier of the Audience Manager data source that this identity is part of.",
+                "required": true,
+                "example": "0"
+            },
+            "id": {
+                "in": "path",
+                "name": "id",
+                "schema": {
+                    "type": "string"
+                },
+                "description": "The Id of the profile that belongs to the data source you provided above.",
+                "required": true,
+                "example": "44895739005892880042646901172160757754"
+            }
+        },
+        "schemas": {
+            "UpdateUsersDataRequest": {
+                "description": "Wrapper for multiple profile updates that belong to a given data stream.",
+                "type": "object",
+                "properties": {
+                    "tracing_id": {
+                        "description": "Optional trace ID for tracking operations tied to a stream across our systems.",
+                        "type": "string",
+                        "required": false
+                    },
+                    "ops": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserDataOperation"
+                        }
+                    }
+                }
+            },
+            "UserDataOperation": {
+                "description": "An Audience Manager profile update representation.",
+                "type": "object",
+                "properties": {
+                    "identities": {
+                        "description": "The identities which the profile update acts upon.<br> For more details, see [Profile Merge Rules](https://marketing.adobe.com/resources/help/en_US/aam/profile-link-intro.html).",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Id"
+                        },
+                        "required": true,
+                        "example": [
+                            {
+                                "dataSourceId": 813,
+                                "value": "CRM1"
+                            },
+                            {
+                                "dataSourceId": 20914,
+                                "value": "IDFA1"
+                            },
+                            {
+                                "dataSourceId": 0,
+                                "value": "12345678901234567890123456789012345678"
+                            },
+                            {
+                                "integrationCode": "myDataSource",
+                                "value": "myCRMID"
+                            },
+                            {
+                                "namespaceCode": "myUISEmailNamespace",
+                                "value": "myHashedEmail"
+                            }
+                        ]
+                    },
+                    "traitEvaluation": {
+                        "description": "The signals that should be evaluated against the provided data sources to determine which traits should be written to the profile(s).",
+                        "type": "object",
+                        "schema": {
+                            "$ref": "#/components/schemas/TraitEvaluation"
+                        },
+                        "example": {
+                            "data": [
+                                {
+                                    "key": "c_trait",
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    },
+                    "traitInput": {
+                        "description": "The trait IDs that should be written to the profile(s).",
+                        "schema": {
+                            "$ref": "#/components/schemas/TraitInput"
+                        },
+                        "example": {
+                            "traitIds": [
+                                12345,
+                                2463434
+                            ]
+                        }
+                    },
+                    "targetDataSource": {
+                        "description": "The data sources the provided signals and trait IDs should be evaluated against.",
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "required": false,
+                        "example": [
+                            12345,
+                            34569
+                        ]
+                    },
+                    "operationType": {
+                        "description": "It dictates how the provided signals and/or trait IDs act upon the given profile(s).<br> By default, each profile update is an `APPEND` operation.<br> If an `OVERWRITE` operation is provided, then the `targetDataSource` array must not be empty and contain one single data source.",
+                        "type": "string",
+                        "enum": [
+                            "APPEND",
+                            "OVERWRITE",
+                            "DELETE"
+                        ],
+                        "required": false
+                    },
+                    "routingHint": {
+                        "description": "The routing information used for passing on the updated profile data to the right edge region.",
+                        "type": "object",
+                        "schema": {
+                            "$ref": "#/components/schemas/RoutingHint"
+                        },
+                        "required": false,
+                        "example": {
+                            "profileLocationId": [
+                                7,
+                                9
+                            ]
+                        }
+                    }
+                }
+            },
+            "Id": {
+                "description": "An Audience Manager identity representation.",
+                "type": "object",
+                "properties": {
+                    "dataSourceId": {
+                        "description": "The unique identifier of the Audience Manager Data Source, that this identity is part of.",
+                        "type": "integer"
+                    },
+                    "integrationCode": {
+                        "description": "The integration code of the Audience Manager Data Source, that this identity is part of.",
+                        "type": "string"
+                    },
+                    "namespaceCode": {
+                        "description": "The corresponding UIS Namespace Code associated to the Audience Manager Data Source this identity is part of.",
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TraitEvaluation": {
+                "description": "The signals that should be evaluated against the provided data sources to determine what traits should be written to the profile.",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Signal"
+                        }
+                    }
+                }
+            },
+            "Signal": {
+                "description": "The Audience Manager smallest data units used for constructing traits.<br> For more details, see [Signals, Traits and Segments](https://marketing.adobe.com/resources/help/en_US/aam/c_signal_trait_segment.html). ",
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TraitInput": {
+                "description": "The trait IDs that should be written to the profile(s).<br> For more details, see [Signals, Traits and Segments](https://marketing.adobe.com/resources/help/en_US/aam/c_signal_trait_segment.html).",
+                "type": "object",
+                "properties": {
+                    "traitIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "RoutingHint": {
+                "description": "The routing information used for passing on the updated profile(s) data to the right edge region.",
+                "type": "object",
+                "properties": {
+                    "profileLocationId": {
+                        "description": "A [location hint](https://marketing.adobe.com/resources/help/en_US/aam/dcs-regions.html)\nthat corresponds to the region where we've previously seen this user\ninteracting with the Adobe services.\n",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "UpdateUsersDataResponse": {
+                "type": "object",
+                "properties": {
+                    "transactionId": {
+                        "description": "The unique identifier of the given request.",
+                        "type": "string",
+                        "required": true
+                    },
+                    "tracingId": {
+                        "description": "The provided tracing ID for tracking operations tied to a stream across our systems.",
+                        "type": "string",
+                        "required": false,
+                        "example": "myTracingId"
+                    },
+                    "status": {
+                        "description": "SUCCESS is the default - all the profile updates have been successfully processed.<br><br>\nPARTIAL_SUCCESS - some of the profile updates could not be successfully processed due to internal errors.<br><br>\nBAD_DATA - at least one profile update was malformed.<br><br>\nINTERNAL_ERROR - failed to process the given profile updates.<br><br>\nUNAUTHORIZED - the provided credentials are not applicable in the provided request.\n",
+                        "type": "string",
+                        "enum": [
+                            "SUCCESS",
+                            "PARTIAL_SUCCESS",
+                            "BAD_REQUEST",
+                            "INTERNAL_ERROR",
+                            "UNAUTHORIZED"
+                        ]
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ResponseError"
+                        }
+                    }
+                },
+                "example": {
+                    "transactionId": "sfwdsbzdse678",
+                    "status": "PARTIAL_SUCCESS",
+                    "errors": [
+                        {
+                            "operationIndex": 1,
+                            "details": [
+                                {
+                                    "message": "Unable to process operation due to internal errors."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "ProfileViewerResponse": {
+                "type": "object",
+                "properties": {
+                    "summaries": {
+                        "description": "Profile summary broken down by region",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileSummary"
+                        }
+                    },
+                    "profile": {
+                        "description": "The expanded view of the profile",
+                        "$ref": "#/components/schemas/Profile"
+                    }
+                }
+            },
+            "Summary": {
+                "type": "object",
+                "properties": {
+                    "regionId": {
+                        "description": "The region id where the profile is stored",
+                        "type": "string",
+                        "required": true
+                    },
+                    "source": {
+                        "description": "The type of the profile source.",
+                        "type": "string",
+                        "enum": [
+                            "REALTIME",
+                            "BACKEND"
+                        ]
+                    },
+                    "profileSummary": {
+                        "description": "Profile data summary",
+                        "$ref": "#/components/schemas/ProfileSummary"
+                    }
+                }
+            },
+            "ProfileSummary": {
+                "type": "object",
+                "properties": {
+                    "firstPartyTraitsCount": {
+                        "description": "The first party traits",
+                        "type": "integer",
+                        "required": true
+                    },
+                    "thirdPartyTraitsCount": {
+                        "description": "The number of third party traits",
+                        "type": "integer"
+                    },
+                    "segmentsCount": {
+                        "description": "The number of segments",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "firstPartyTraitsCount": 0,
+                    "thirdPartyTraitsCount": 0,
+                    "segmentsCount": 0
+                }
+            },
+            "Profile": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "The id value this profile corresponds to.",
+                        "type": "string",
+                        "required": true
+                    },
+                    "namespace": {
+                        "description": "The namespace (data source) of the Audience Manager Data Source, that the provided id is part of.",
+                        "$ref": "#/components/schemas/Namespace"
+                    },
+                    "data": {
+                        "description": "Profile data",
+                        "$ref": "#/components/schemas/Data"
+                    },
+                    "links": {
+                        "description": "The ids linked to the provided one.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        }
+                    }
+                }
+            },
+            "Namespace": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the Audience Manager Data Source, that an identity is part of.",
+                        "type": "string",
+                        "required": true
+                    },
+                    "integration code": {
+                        "description": "The integration code of this data source",
+                        "type": "string",
+                        "required": true
+                    },
+                    "data provider name": {
+                        "description": "The name of the partner/customer that created the trait",
+                        "type": "string",
+                        "required": true
+                    },
+                    "type": {
+                        "description": "The data source type",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": 0,
+                    "integration code": "CORE",
+                    "data provider name": "Demdex, Inc",
+                    "type": "COOKIE"
+                }
+            },
+            "Data": {
+                "type": "object",
+                "properties": {
+                    "traits": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Trait"
+                        }
+                    },
+                    "segments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Segment"
+                        }
+                    }
+                }
+            },
+            "Trait": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the trait.",
+                        "type": "integer",
+                        "required": true
+                    },
+                    "name": {
+                        "description": "The name of the trait.",
+                        "type": "string",
+                        "required": true
+                    },
+                    "type": {
+                        "description": "The type of the trait",
+                        "type": "string",
+                        "required": true
+                    },
+                    "description": {
+                        "description": "The trait description",
+                        "type": "string",
+                        "required": true,
+                        "example": "myTracingId"
+                    },
+                    "data provider name": {
+                        "description": "The name of the partner/customer that created the trait",
+                        "type": "string",
+                        "required": true
+                    },
+                    "last realization": {
+                        "description": "The datetime of the latest trait realization.",
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "example": {
+                    "id": 123456,
+                    "name": "Language Locale Folder Trait",
+                    "type": "1st party",
+                    "description": "Auto Created Folder Trait",
+                    "data provider name": "Adobe",
+                    "last realization": "2019-09-05 09:41:00"
+                }
+            },
+            "Segment": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the segment.",
+                        "type": "integer",
+                        "required": true
+                    },
+                    "name": {
+                        "description": "The name of the segment.",
+                        "type": "string",
+                        "required": true
+                    },
+                    "description": {
+                        "description": "The description of the segment",
+                        "type": "string",
+                        "required": true
+                    },
+                    "data provider name": {
+                        "description": "The name of the partner/customer that created the segment",
+                        "type": "string",
+                        "required": true
+                    },
+                    "active": {
+                        "description": "It signals whether the segments is active or not.",
+                        "type": "boolean",
+                        "required": true
+                    }
+                },
+                "example": {
+                    "id": 56789,
+                    "name": "segment name",
+                    "description\"": "segment description",
+                    "data provider name": "Adobe",
+                    "last realization": "2019-11-19 09:53:23",
+                    "active": true
+                }
+            },
+            "Link": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "The value of the linked id that belongs to the below namespace.",
+                        "type": "string",
+                        "required": true
+                    },
+                    "namespace": {
+                        "description": "The unique identifier of the Audience Manager Data Source, that this identity is part of.",
+                        "$ref": "#/components/schemas/Namespace"
+                    },
+                    "linking datetime": {
+                        "description": "The date when the ids were linked.",
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                "example": {
+                    "id": "sfwdsbzdse678",
+                    "namespace": [
+                        {
+                            "id": 0,
+                            "integration code": "CORE",
+                            "data provider name": "Demdex, Inc",
+                            "type": "COOKIE"
+                        }
+                    ],
+                    "linking datetime": "2019-09-05 09:33:41"
+                }
+            },
+            "ResponseError": {
+                "type": "object",
+                "properties": {
+                    "operationIndex": {
+                        "description": "The operation which could not be successfully processed.<br> The indexing starts from 1.",
+                        "type": "integer"
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ErrorDetail"
+                        }
+                    }
+                }
+            },
+            "ErrorDetail": {
+                "type": "object",
+                "properties": {
+                    "errorCode": {
+                        "description": "See [Audience Manager Error Codes](https://marketing.adobe.com/resources/help/en_US/aam/dcs_error_codes.html).",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "String"
+                    }
+                }
+            }
+        }
+    }
+}
