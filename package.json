@@ -17,6 +17,14 @@
   "engines": {
     "node": ">=10.0.0"
   },
+  "files": [
+    "src",
+    "spec",
+    "README.md",
+    "LICENSE",
+    "COPYRIGHT",
+    "types.d.ts"
+  ],
   "dependencies": {
     "@adobe/aio-lib-core-errors": "^3.0.0",
     "@adobe/aio-lib-core-logging": "1.0.0",
