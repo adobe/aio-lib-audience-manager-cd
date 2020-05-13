@@ -19,10 +19,16 @@ let sdkClient = {}
 const orgId = process.env.AUDIENCE_MANAGER_ORG_ID
 const apiKey = process.env.AUDIENCE_MANAGER_API_KEY
 const accessToken = process.env.AUDIENCE_MANAGER_ACCESS_TOKEN
-const dataSourceId = process.env.AUDIENCE_MANAGER_DATA_SOURCE_ID
 const id = process.env.AUDIENCE_MANAGER_ID
-const dstream = process.env.AUDIENCE_MANAGER_DSTREAM_ID
-const streamId = process.env.AUDIENCE_MANAGER_STREAM_ID
+
+// fake values!
+const dataSourceId = 1
+const dataSourceId2 = 2
+const dstream = 3
+const streamId = 12345
+const traitId = 0
+const tdpid = 0
+
 beforeAll(async () => {
   sdkClient = await sdk.init(orgId, apiKey, accessToken)
 })
@@ -71,28 +77,12 @@ test('test Stream API', async () => {
       {
         identities: [
           {
-            dataSourceId: 812,
-            value: 'CRM1'
+            dataSourceId: dataSourceId,
+            value: id
           },
           {
-            dataSourceId: 20914,
-            value: 'IDFA1'
-          },
-          {
-            dataSourceId: 0,
-            value: '12345678901234567890123456789012345678'
-          },
-          {
-            dataSourceId: 2020,
-            value: '431988'
-          },
-          {
-            integrationCode: 'myDataSource',
-            value: 'myCRMID'
-          },
-          {
-            namespaceCode: 'myUISEmailNamespace',
-            value: 'myHashedEmail'
+            dataSourceId: dataSourceId2,
+            value: id
           }
         ],
         traitEvaluation: {
@@ -105,21 +95,13 @@ test('test Stream API', async () => {
         },
         traitInput: {
           traitIds: [
-            12345,
-            2463434
+            traitId
           ]
         },
         targetDataSource: [
-          12345,
-          34569
+          tdpid
         ],
-        operationType: 'APPEND',
-        routingHint: {
-          profileLocationId: [
-            7,
-            9
-          ]
-        }
+        operationType: 'APPEND'
       }
     ]
   }
@@ -130,10 +112,10 @@ test('test Stream API', async () => {
 
 test('test Data Collection API', async () => {
   const params = {
-    d_orgid: '6578A55456E84E247F000101@AdobeOrg',
-    d_sid: '3517094',
-    d_tdpid: '66722',
-    d_uuid: '07955261652886032950143702505894272138',
+    d_orgid: orgId,
+    d_sid: streamId,
+    d_tdpid: tdpid,
+    d_uuid: id,
     d_ws: 'overwrite',
     d_location_id: '6'
   }
