@@ -30,7 +30,7 @@
     "@adobe/aio-lib-core-logging": "1.1.0",
     "cross-fetch": "^3.0.4",
     "fetch-mock": "^9.3.1",
-    "swagger-client": "3.9.6"
+    "swagger-client": "3.10.2"
   },
   "plugins": [
     "istanbul "
