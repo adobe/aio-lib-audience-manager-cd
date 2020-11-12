@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 [![Version](https://img.shields.io/npm/v/@adobe/aio-lib-audience-manager-cd.svg)](https://npmjs.org/package/@adobe/aio-lib-audience-manager-cd)
 [![Downloads/week](https://img.shields.io/npm/dw/@adobe/aio-lib-audience-manager-cd.svg)](https://npmjs.org/package/@adobe/aio-lib-audience-manager-cd)
-[![Build Status](https://travis-ci.com/adobe/aio-lib-audience-manager-cd.svg?branch=master)](https://travis-ci.com/@adobe/aio-lib-audience-manager-cd)
+![Node.js CI](https://github.com/adobe/aio-lib-audience-manager-cd/workflows/Node.js%20CI/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-lib-audience-manager-cd/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-lib-audience-manager-cd/)
 
@@ -79,7 +79,8 @@ Before calling any method initialize the instance by calling the <code>init</cod
 <a name="AudienceManagerCDCoreApi"></a>
 
 ## AudienceManagerCDCoreApi
-This class provides methods to call Adobe Audience Manager Customer Data APIs.Before calling any method initialize the instance by calling the `init` method on it with valid values for orgId, apiKey and accessToken.
+This class provides methods to call Adobe Audience Manager Customer Data APIs.
+Before calling any method initialize the instance by calling the `init` method on it with valid values for orgId, apiKey and accessToken.
 
 **Kind**: global class  
 
@@ -127,7 +128,9 @@ Initializes a AudienceManagerCDCoreApi object and returns it.
 <a name="AudienceManagerCDCoreApi+updateStream"></a>
 
 ### audienceManagerCDCoreApi.updateStream(streamId, body)
-Data streaming: Allows multiple profile updates on the same call.Ingest profile updates related to a given data stream.
+Data streaming: Allows multiple profile updates on the same call.
+
+Ingest profile updates related to a given data stream.
 
 **Kind**: instance method of [<code>AudienceManagerCDCoreApi</code>](#AudienceManagerCDCoreApi)  
 
@@ -139,7 +142,10 @@ Data streaming: Allows multiple profile updates on the same call.Ingest profil
 <a name="AudienceManagerCDCoreApi+updateProfile"></a>
 
 ### audienceManagerCDCoreApi.updateProfile(dStreamId, [params], [body])
-GET/POST a Data Collection:Update a single Audience Manager profile via a GET or POST request.If the `body` is left out the update is performed via a GET request using the `params` object.Otherwise, to enforce a POST request, please set the required parameters into the `body` object
+GET/POST a Data Collection:
+Update a single Audience Manager profile via a GET or POST request.
+If the `body` is left out the update is performed via a GET request using the `params` object.
+Otherwise, to enforce a POST request, please set the required parameters into the `body` object
 
 **Kind**: instance method of [<code>AudienceManagerCDCoreApi</code>](#AudienceManagerCDCoreApi)  
 
@@ -159,7 +165,9 @@ GET/POST a Data Collection:Update a single Audience Manager profile via a GET o
 <a name="AudienceManagerCDCoreApi+getProfile"></a>
 
 ### audienceManagerCDCoreApi.getProfile(dataSourceId, id, [filter])
-Get Audience Manager profile:Returns aggregated information for a profile from all Audience Manager regions, including trait and segment qualification information.You can filter the requests by region to return qualification information from certain regions only.
+Get Audience Manager profile:
+Returns aggregated information for a profile from all Audience Manager regions, including trait and segment qualification information.
+You can filter the requests by region to return qualification information from certain regions only.
 
 **Kind**: instance method of [<code>AudienceManagerCDCoreApi</code>](#AudienceManagerCDCoreApi)  
 
