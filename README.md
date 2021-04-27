@@ -17,7 +17,7 @@ governing permissions and limitations under the License.
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-lib-audience-manager-cd/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-lib-audience-manager-cd/)
 
 # Adobe I/O Audience Manager Customer Data SDK
-Javascript SDK wrapping the [Audience Manager Customer Data API](https://dmp-data.adobe.io/__docs#/).
+Node Javascript SDK wrapping the [Audience Manager Customer Data API](https://dmp-data.adobe.io/__docs#/).
 
 More details on the API can be found [here](https://docs.adobe.com/content/help/en/aam-customer-api/help/beta-guide/customer-api-overview.html).
 ### Installing
