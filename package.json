@@ -1,6 +1,6 @@
 {
   "name": "@adobe/aio-lib-audience-manager-cd",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "description": "Audience Manager Customer Data SDK",
   "repository": "https://github.com/adobe/aio-lib-audience-manager-cd",
   "license": "Apache-2.0",
