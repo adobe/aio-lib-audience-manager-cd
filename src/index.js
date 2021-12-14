@@ -127,7 +127,7 @@ class AudienceManagerCDCoreApi {
    * @param {string} body the POST body.
    */
   async updateStream (streamId, body) {
-    var params = {}
+    const params = {}
     params.streamId = streamId
     params['x-gw-ims-org-id'] = this.orgId
     params['x-api-key'] = this.apiKey
@@ -182,7 +182,8 @@ class AudienceManagerCDCoreApi {
     }
   }
 
-  /** Get Audience Manager profile:
+  /**
+   * Get Audience Manager profile:
    * Returns aggregated information for a profile from all Audience Manager regions, including trait and segment qualification information.
    * You can filter the requests by region to return qualification information from certain regions only.
    *
