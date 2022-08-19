@@ -15,7 +15,7 @@
     "generate-docs": "npm run typings && npm run jsdoc"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": "^14.16 || ^16.13 || >=18"
   },
   "files": [
     "src",
@@ -26,8 +26,8 @@
     "types.d.ts"
   ],
   "dependencies": {
-    "@adobe/aio-lib-core-errors": "^3.0.0",
-    "@adobe/aio-lib-core-logging": "^1.1.2",
+    "@adobe/aio-lib-core-errors": "^3.1.0",
+    "@adobe/aio-lib-core-logging": "^2.0.0",
     "cross-fetch": "^3.0.4",
     "fetch-mock": "^9.3.1",
     "swagger-client": "3.10.13"
