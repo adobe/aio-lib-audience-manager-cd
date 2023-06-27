@@ -62,7 +62,7 @@ class AudienceManagerCDCoreApi {
   async init (orgId, apiKey, accessToken) {
     const spec = require('../spec/api.json')
     const swagger = new Swagger({
-      spec: spec,
+      spec,
       requestInterceptor: req => requestInterceptor(req, accessToken),
       responseInterceptor,
       usePromise: true
@@ -212,5 +212,5 @@ class AudienceManagerCDCoreApi {
 }
 
 module.exports = {
-  init: init
+  init
 }
