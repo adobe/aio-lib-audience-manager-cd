@@ -10,6 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 -->
 
+---
+This repository is deprecated and is no longer maintained.
+
+---
 [![Version](https://img.shields.io/npm/v/@adobe/aio-lib-audience-manager-cd.svg)](https://npmjs.org/package/@adobe/aio-lib-audience-manager-cd)
 [![Downloads/week](https://img.shields.io/npm/dw/@adobe/aio-lib-audience-manager-cd.svg)](https://npmjs.org/package/@adobe/aio-lib-audience-manager-cd)
 ![Node.js CI](https://github.com/adobe/aio-lib-audience-manager-cd/workflows/Node.js%20CI/badge.svg)
