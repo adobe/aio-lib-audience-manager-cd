@@ -88,7 +88,7 @@ const data = {
 }
 
 module.exports = {
-  data: data,
+  data,
   errors: {
     Bad_Request: BadRequest,
     Unauthorized_Request: UnauthorizedRequest,
