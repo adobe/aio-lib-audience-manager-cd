@@ -1,4 +1,3 @@
-
 /*
 Copyright 2020 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -13,7 +12,7 @@ governing permissions and limitations under the License.
 /* global fixtureFile */
 
 const mockSwaggerClient = {
-  ...require.requireActual('swagger-client'), // we want the original implementation in there. Then we override the ones we want to mock below
+  ...jest.requireActual('swagger-client'), // we want the original implementation in there. Then we override the ones we want to mock below
   apis: {},
   mockFn: function (methodName) {
     const cmd = methodName.split('.')
