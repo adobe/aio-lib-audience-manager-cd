@@ -42,7 +42,7 @@ test('sdk init error, no accessToken passed', async () => {
 })
 
 describe('updateStream', () => {
-  test('test success call', async () => {
+  test('success call', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     // setting up mocks
@@ -65,7 +65,7 @@ describe('updateStream', () => {
     expect(helpers.requestInterceptor).toHaveBeenCalled()
   })
 
-  test('test error create stream', async () => {
+  test('error create stream', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     const err = new Error('swagger-client error')
@@ -93,7 +93,7 @@ describe('updateStream', () => {
 })
 
 describe('updateProfile (Body)', () => {
-  test('test success call', async () => {
+  test('success call', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     // setting up mocks
@@ -117,7 +117,7 @@ describe('updateProfile (Body)', () => {
     expect(helpers.requestInterceptor).toHaveBeenCalled()
   })
 
-  test('test error POST a single Data Collection', async () => {
+  test('error POST a single Data Collection', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     const err = new Error('swagger-client error')
@@ -146,7 +146,7 @@ describe('updateProfile (Body)', () => {
 })
 
 describe('updateProfile', () => {
-  test('test success call', async () => {
+  test('success call', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     // setting up mocks
@@ -168,7 +168,7 @@ describe('updateProfile', () => {
     expect(helpers.requestInterceptor).toHaveBeenCalled()
   })
 
-  test('test error get a single Data Collection by getting event s2s', async () => {
+  test('error get a single Data Collection by getting event s2s', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     const err = new Error('swagger-client error')
@@ -195,7 +195,7 @@ describe('updateProfile', () => {
 })
 
 describe('getProfile', () => {
-  test('test success call', async () => {
+  test('success call', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     // setting up mocks
@@ -216,7 +216,7 @@ describe('getProfile', () => {
     })
   })
 
-  test('test error get a Profile Data', async () => {
+  test('error get a Profile Data', async () => {
     const sdkClient = await sdk.init(orgId, apiKey, accessToken)
 
     const err = new Error('swagger-client error')
