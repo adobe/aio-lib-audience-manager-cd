@@ -15,7 +15,7 @@
     "generate-docs": "npm run typings && npm run jsdoc"
   },
   "engines": {
-    "node": "^14.16 || ^16.13 || >=18"
+    "node": ">=18"
   },
   "files": [
     "src",
